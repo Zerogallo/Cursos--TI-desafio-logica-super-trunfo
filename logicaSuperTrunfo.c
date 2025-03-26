@@ -18,15 +18,15 @@ struct Pais {
 };
 
 // Função para exibir as informações de uma cidade
-void exibirCidade(struct Cidade cidade, char estado, int cidadeNumero, char nomePais[]) {
+void exibirCidade(struct Cidade cidades, char estado, int cidadeNumero, char nomePais[]) {
     // Gerar o código da carta com base no estado e cidade
     printf("Codigo da carta: %c%02d\n", estado, cidadeNumero);
     printf("Pais: %s\n", nomePais);
-    printf("  Cidade: %s\n", cidade.nome);
-    printf("    Populacao: %d habitantes\n", cidade.populacao);
-    printf("    Area: %.2f km\n", cidade.area);
-    printf("    PIB: %.2f bilhoes de unidades monetarias\n", cidade.pib);
-    printf("    Pontos turisticos: %d\n", cidade.pontosTuristicos);
+    printf("  Cidade: %s\n", cidades.nome);
+    printf("    Populacao: %d habitantes\n", cidades.populacao);
+    printf("    Area: %.2f km\n", cidades.area);
+    printf("    PIB: %.2f bilhoes de unidades monetarias\n", cidades.pib);
+    printf("    Pontos turisticos: %d\n", cidades.pontosTuristicos);
     printf("\n");
 }
 
@@ -88,6 +88,7 @@ int main() {
          // Perguntar o nome do país
          printf("Digite o nome do pais do estado %c: ", 'A' + i);
          scanf("%s", estados[i].nomePais);   // Captura o nome do país
+         printf("\n");
 
         for (int j = 0; j < NUM_CIDADES; j++) {
 
@@ -97,6 +98,7 @@ int main() {
             
             printf("Digite o nome da cidade: ");
             scanf("%s", cidades[i][j].nome);
+            printf("\n");
 
             printf("Digite a populacao da cidade: ");
             scanf("%d", &cidades[i][j].populacao);
@@ -106,9 +108,10 @@ int main() {
 
             printf("Digite o PIB da cidade (em bilhoes): ");
             scanf("%f", &cidades[i][j].pib);
-
+            
             printf("Digite o numero de pontos turisticos: ");
             scanf("%d", &cidades[i][j].pontosTuristicos);
+            
 
             printf("\n");
         }
@@ -122,39 +125,87 @@ int main() {
         }
     }
 
-    int opcao, cidade1, cidade2, atributo;
+    int opcao, pais1, pais2, cidade1, cidade2, atributo;
 
     // Menu interativo
     do {
+        
         printf("\nMenu de Comparacao de Cartas:\n");
-        printf("1. Comparar duas cidades\n");
+        printf("\n");
+        printf("1. Comparar duas Cartas\n");
         printf("2. Sair\n");
+        printf("\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
-
+        printf("\n");
+    
         if (opcao == 1) {
-            printf("Escolha duas cidades para comparar:\n");
-            printf("Digite o numero do pais (1 a 8) e o numero da cidade (1 a 4):\n");
-
-            printf("Primeira cidade - Pais (1 a 8) e Cidade (1 a 4): ");
-            scanf("%d %d", &cidade1, &cidade2);
-            cidade1--;  // Ajusta o índice para 0 baseado
-            cidade2--;  // Ajusta o índice para 0 baseado
-
+            // Escolher as cidades para comparação
+            printf("Escolha duas Cartas para comparar:\n");
+            // Exibir países e suas cidades
+            for (int i = 0; i < NUM_ESTADOS; i++) {
+                printf("\nPais %d: %s\n\n", i + 1, estados[i].nomePais);
+                for (int j = 0; j < NUM_CIDADES; j++) {
+                    // Gerar o código da carta, que é composto pelo estado (A, B, C, ...) e número da cidade (1 a 4)
+                    printf("  (Carta: %c%02d) Cidade %d: %s ", 
+                            'A' + i,  // 'A' + i gera a letra correspondente ao estado
+                            j + 1,  // j + 1 gera o número da cidade (1 a 4)
+                            j + 1, 
+                            cidades[i][j].nome);
+                            
+                }
+                printf("\n");
+            }
+            printf("\n");
+    
+            // Primeira cidade - Escolher país e cidade
+            printf("\nPrimeira Carta - Digite o numero do pais (1 a 8): ");
+            scanf("%d", &pais1);
+            pais1--;  // Ajusta para o índice 0
+            printf("\n");
+            printf("Escolha a cidade do pais %s (1 a 4): ", estados[pais1].nomePais);
+            scanf("%d", &cidade1);
+            cidade1--;  // Ajusta para o índice 0
+            printf("\n");
+            printf("Escolha a cidade %s  ",cidades[pais1][cidade1].nome);
+            printf("\n");
+    
+            // Segunda cidade - Escolher país e cidade
+            printf("\nSegunda Carta - Digite o numero do pais (1 a 8): ");
+            scanf("%d", &pais2);
+            pais2--;  // Ajusta para o índice 0
+            printf("\n");
+            printf("Escolha a cidade do pais %s (1 a 4): ", estados[pais2].nomePais);
+            scanf("%d", &cidade2);
+            cidade2--;  // Ajusta para o índice 
+            printf("\n");
+            printf("Escolha a cidade %s  ", cidades[pais2][cidade2].nome);
+            printf("\n");
+            
+    
+            printf("\n   %s, %s   &   %s, %s   \n", 
+                estados[pais1].nomePais, cidades[pais1][cidade1].nome, 
+                estados[pais2].nomePais, cidades[pais2][cidade2].nome);
+        
+            printf("\n");
+    
+            // Escolher o atributo para comparação
             printf("Escolha o atributo para comparacao:\n");
+            printf("\n");
             printf("1. Populacao\n");
             printf("2. Area\n");
             printf("3. PIB\n");
             printf("4. Pontos turisticos\n");
+            printf("\n");
             printf("Escolha um atributo: ");
             scanf("%d", &atributo);
-
+            printf("\n");
+    
             // Comparar as cartas
-            compararCartas(cidades[cidade1 / NUM_CIDADES][cidade1 % NUM_CIDADES], 
-                           cidades[cidade2 / NUM_CIDADES][cidade2 % NUM_CIDADES], 
-                           atributo);
+            compararCartas(cidades[pais1][cidade1], cidades[pais2][cidade2], atributo);
         }
     } while (opcao != 2);
-
+    
     return 0;
-}
+    }
+    
